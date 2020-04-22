@@ -311,7 +311,7 @@ void *map_physical(uint64_t phys_addr, size_t len)
     printf("\nError(IOConnectMapMemory): system 0x%x subsystem 0x%x code 0x%x ",
            err_get_system(err), err_get_sub(err), err_get_code(err));
 
-    printf("physical 0x%"PRIx64"[0x%x]\n", phys_addr, (unsigned int)len);
+		printf("physical 0x%08llx[0x%x]\n", phys_addr, (unsigned int)len);
 
     switch (err_get_code(err)) {
       case 0x2c2: printf("Invalid argument.\n"); errno = EINVAL; break;
