@@ -28,25 +28,10 @@ libs: DirectHW.c DirectHW.h
 	mv libDirectHW.a build/Release/libDirectHW.a
 
 install:
-	sudo mkdir -p /usr/local/lib
-#	sudo cp -r build/Release/DirectHW.kext /Library/Extensions/DirectHW.kext
-	sudo cp -r build/Release/DirectHW.kext /usr/local/share/DirectHW.kext
-	sudo cp -r build/Release/DirectHW.framework /Library/Frameworks/DirectHW.framework
 	sudo cp -r build/Release/libDirectHW.a /usr/local/lib/libDirectHW.a
 	sudo cp -r build/Release/libDirectHW.dylib /usr/local/lib/libDirectHW.dylib
-#	sudo chmod -R 755 /Library/Extensions/DirectHW.kext
-	sudo chmod -R 755 /usr/local/share/DirectHW.kext
-	sudo chmod -R 755 /Library/Frameworks/DirectHW.framework
 	sudo chmod 644 /usr/local/lib/libDirectHW.a
 	sudo chmod 644 /usr/local/lib/libDirectHW.dylib
-#	sudo chown -R root:wheel /Library/Extensions/DirectHW.kext
-	sudo chown -R root:wheel /usr/local/share/DirectHW.kext
-	sudo chown -R root:wheel /Library/Frameworks/DirectHW.framework
-#	sudo kextunload -v /Library/Extensions/DirectHW.kext
-#	sudo kextunload -v /usr/local/share/DirectHW.kext
-#	sudo kextload -v /Library/Extensions/DirectHW.kext
-#	sudo kextload -v /usr/local/share/DirectHW.kext
-#	sudo kextcache -f -update-volume /
 
 clean:
 	rm -rf build
