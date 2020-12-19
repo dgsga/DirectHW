@@ -29,9 +29,6 @@
 #define MAP_FAILED	((void *)-1)
 #endif
 
-/* define WANT_OLD_API for support of OSX 10.4 and earlier */
-#undef WANT_OLD_API
-
 /* define DEBUG to print Framework debugging information */
 #undef DEBUG
 
@@ -188,17 +185,7 @@ static int darwin_iowrite(int pos, unsigned char * buf, int len)
   if (len > 4)
     return 1;
 
-#if !defined(__LP64__) && defined(WANT_OLD_API)
-  /* Check if OSX 10.5 API is available */
-  if (IOConnectCallStructMethod != NULL) {
-#endif
     err = IOConnectCallStructMethod(connect, kWriteIO, &in, dataInLen, &out, &dataOutLen);
-#if !defined(__LP64__) && defined(WANT_OLD_API)
-  } else {
-    /* Use old API */
-    err = IOConnectMethodStructureIStructureO(connect, kWriteIO, dataInLen, &dataOutLen, &in, &out);
-  }
-#endif
 
   if (err != KERN_SUCCESS)
     return 1;
@@ -254,13 +241,8 @@ int iopl(int level __attribute__((unused)))
 void *map_physical(uint64_t phys_addr, size_t len)
 {
   kern_return_t err;
-#if __LP64__
   mach_vm_address_t addr;
   mach_vm_size_t size;
-#else
-  vm_address_t addr;
-  vm_size_t size;
-#endif
   size_t dataInLen = sizeof(map_t);
   size_t dataOutLen = sizeof(map_t);
   map_t in, out;
@@ -272,17 +254,7 @@ void *map_physical(uint64_t phys_addr, size_t len)
   printf("map_phys: phys %08lx, %08x\n", phys_addr, len);
 #endif
 
-#if !defined(__LP64__) && defined(WANT_OLD_API)
-  /* Check if OSX 10.5 API is available */
-  if (IOConnectCallStructMethod != NULL) {
-#endif
     err = IOConnectCallStructMethod(connect, kPrepareMap, &in, dataInLen, &out, &dataOutLen);
-#if !defined(__LP64__) && defined(WANT_OLD_API)
-  } else {
-    /* Use old API */
-    err = IOConnectMethodStructureIStructureO(connect, kPrepareMap, dataInLen, &dataOutLen, &in, &out);
-  }
-#endif
 
   if (err != KERN_SUCCESS) {
     printf("\nError(kPrepareMap): system 0x%x subsystem 0x%x code 0x%x ",
@@ -378,17 +350,7 @@ int rdcpuid(uint32_t eax, uint32_t ecx, uint32_t cpudata[4])
   in.eax = eax;
   in.ecx = ecx;
 
-#if !defined(__LP64__) && defined(WANT_OLD_API)
-  /* Check if OSX 10.5 API is available */
-  if (IOConnectCallStructMethod != NULL) {
-#endif
     err = IOConnectCallStructMethod(connect, kReadCpuID, &in, dataInLen, &out, &dataOutLen);
-#if !defined(__LP64__) && defined(WANT_OLD_API)
-  } else {
-    /* Use old API */
-    err = IOConnectMethodStructureIStructureO(connect, kReadCpuID, dataInLen, &dataOutLen, &in, &out);
-  }
-#endif
 
   if (err != KERN_SUCCESS)
     return -1;
@@ -407,17 +369,7 @@ int readmem32(uint64_t addr, uint32_t* data)
   in.core = current_logical_cpu;
   in.addr = addr;
 
-#if !defined(__LP64__) && defined(WANT_OLD_API)
-  /* Check if OSX 10.5 API is available */
-  if (IOConnectCallStructMethod != NULL) {
-#endif
     err = IOConnectCallStructMethod(connect, kReadMem, &in, dataInLen, &out, &dataOutLen);
-#if !defined(__LP64__) && defined(WANT_OLD_API)
-  } else {
-    /* Use old API */
-    err = IOConnectMethodStructureIStructureO(connect, kReadMem, dataInLen, &dataOutLen, &in, &out);
-}
-#endif
 
 if (err != KERN_SUCCESS)
     return -1;
@@ -438,17 +390,7 @@ int wrmsr(int addr, msr_t msr)
   in.lo = msr.lo;
   in.hi = msr.hi;
 
-#if !defined(__LP64__) && defined(WANT_OLD_API)
-  /* Check if OSX 10.5 API is available */
-  if (IOConnectCallStructMethod != NULL) {
-#endif
     err = IOConnectCallStructMethod(connect, kWriteMSR, &in, dataInLen, &out, &dataOutLen);
-#if !defined(__LP64__) && defined(WANT_OLD_API)
-  } else {
-    /* Use old API */
-    err = IOConnectMethodStructureIStructureO(connect, kWriteMSR, dataInLen, &dataOutLen, &in, &out);
-  }
-#endif
 
   if (err != KERN_SUCCESS)
     return 1;

@@ -67,7 +67,7 @@ bool DirectHWUserClient::initWithTask(task_t task, void *securityID, UInt32 type
 	ret = super::initWithTask(task, securityID, type);
 
 #ifdef DEBUG_KEXT
-	IOLog("DirectHW: initWithTask(%p, %p, %08lx)\n", (void *)task, securityID, type);
+    IOLog("DirectHW: initWithTask(%p, %p, %08x)\n", (void *)task, securityID, (unsigned int)type);
 #endif
         if (!ret) {
 		IOLog("DirectHW: initWithTask failed.\n");
@@ -260,7 +260,7 @@ DirectHWUserClient::PrepareMap(map_t * inStruct, map_t * outStruct,
 	LastMapSize = inStruct->size;
 
 #ifdef DEBUG_KEXT
-	IOLog("DirectHW: PrepareMap 0x%08x[0x%x]\n", LastMapAddr, LastMapSize);
+    IOLog("DirectHW: PrepareMap 0x%08llx[0x%llx]\n", LastMapAddr, LastMapSize);
 #endif
 
 	*outStructSize = sizeof(map_t);
@@ -475,7 +475,7 @@ IOReturn DirectHWUserClient::clientMemoryForType(UInt32 type, UInt32 *flags, IOM
 	}
 
 #ifdef DEBUG_KEXT
-	IOLog("DirectHW: Mapping physical 0x%08x[0x%x]\n",
+    IOLog("DirectHW: Mapping physical 0x%08llx[0x%llx]\n",
 			LastMapAddr, LastMapSize);
 #endif
 
